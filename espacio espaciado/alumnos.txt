@@ -1,0 +1,5 @@
+1, Hernán Hernandez, 30330333, 5
+1, Fernando Fernandez, 34340344, 4
+2, Hernán Hernandez, 30330333, 6
+2, Fernando Fernandez, 34340344, 2
+1, Juan Hernandez, 30330355, 7

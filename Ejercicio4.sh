@@ -1,16 +1,18 @@
 #!/bin/bash
-path_sin_espacios=$1
-path_sin_espacios=${path_sin_espacios/" "/"\ "}
-path=${path_sin_espacios[0]}${path_sin_espacios[1]}
-echo "aaaaaa" $path
-echo "path sin espacios: $path_sin_espacios"
-set $path $2 $3 $4 $5 $6
-echo $path_sin_espacios
-echo $#
-echo '$1: ' "$1"
-echo $1
-echo $2
-echo $3
+
+#path_sin_espacios=$1
+#path_sin_espacios=${path_sin_espacios/" "/"\ "}
+#path=${path_sin_espacios[0]}${path_sin_espacios[1]}
+#echo "aaaaaa" $path
+#echo "path sin espacios: $path_sin_espacios"
+#set $path $2 $3 $4 $5 $6
+#echo $path_sin_espacios
+#echo $#
+#echo '$1: ' "$1"
+#echo $1
+#echo $2
+#echo $3
+
 # Descripción: Este script toma como parámetro la ruta de un archivo regular y lo
 # procesa mediante un script de AWK de acuerdo a lo solicitado en la
 # consigna.
@@ -78,9 +80,10 @@ fi
 
 # Si no solicitó ayuda procedemos a procesar los parámetros.
 # Procesamos primero parámetro del archivo con las notas.
-archivo=$1
-
-if [[ -z $archivo ]]; then
+archivo="$1"
+IFS=";"
+echo "$archivo"
+if [[ -z "$archivo" ]]; then
 	# Si nunca se pasó un archivo, mostramos el error y abortamos.
 	errorLlamada "Debe proveer al menos un archivo para procesar."
 else
