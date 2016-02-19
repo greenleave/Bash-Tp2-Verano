@@ -74,44 +74,50 @@ fi
 # Si no solicitó ayuda procedemos a procesar los parámetros.
 # Procesamos primero parámetro del archivo con las notas.
 archivo="$1"
-if [[ -z $archivo ]]; then
+IFS=";"
+echo "$archivo"
+if [[ -z "$archivo" ]]; then
 	# Si nunca se pasó un archivo, mostramos el error y abortamos.
 	errorLlamada "Debe proveer al menos un archivo para procesar."
 else
 	# ¿No tenemos permisos de lectura sobre el archivo?
-	if [[ !(-r $archivo) ]]; then
+	if [ ! -r "$archivo" ]; then
 		# ¿Es porque el archivo no existe?
-		if [[ !(-e $archivo) ]]; then
+		if [ ! -e "$archivo" ]; then
 			# No existe, mostramos el error y abortamos.
 			error "El archivo $archivo no existe."
-	else
-		# No tenemos permisos de lectura, mostramos el error y abortamos.
-		error "No tiene permisos de lectura sobre $archivo."
+		else
+			# No tenemos permisos de lectura, mostramos el error y abortamos.
+			error "No tiene permisos de lectura sobre $archivo."
+		fi
 	fi
-else
+fi
 # Tenemos permisos de lectura. Tratamos de obtener el nombre completo
 # del archivo.
-archivo=$(readlink -f $archivo)
+archivo=$(readlink -f "$archivo")
 # ¿No es un archivo regular?
-if [[ !(-f $archivo) ]]; then
+if [ ! -f "$archivo" ]; then
 # No es un archivo regular, mostramos el error y abortamos.
-error "$archivo no es un archivo."
+	error "$archivo no es un archivo."
 else
-# Tratamos de obtener el tipo de archivo.
-tipoArchivo=$(mimetype --output-format %m $archivo)
-regex="^text/"
-# ¿Es un archivo de texto?
-if [[ !($tipoArchivo =~ $regex) ]]; then
-# No es un archivo de texto, mostramos el error y abortamos.
-error "$archivo debe ser un archivo de texto."
+	# Tratamos de obtener el tipo de archivo.
+	tipoArchivo=$(mimetype --output-format %m "$archivo")
+	echo "Este es el tipo de archivo: $tipoArchivo "
+	regex="^text/"
+	# ¿Es un archivo de texto?
+	if [[ !($tipoArchivo =~ $regex) ]]; then
+	# No es un archivo de texto, mostramos el error y abortamos.
+	error "$archivo debe ser un archivo de texto."
+	fi
 fi
-fi
-fi
-fi
+#fi
+#fi
 
 # Acto seguido, tratamos de procesar el resto de los parámetros.
-param=
-dni=
+IFS=" "
+echo "$archivo"
+param=""
+dni=""
 if [[ "$2" != "-a" && "$2" != "-p" ]]; then
 # Si se pasó una opción no válida, mostramos el error y abortamos.
 errorLlamada "Opción no válida, debe proveer -p o -a."
@@ -131,5 +137,5 @@ fi
 param=$2
 fi
 # Invocamos a AWK para procesar el archivo de notas.
-awk -F ", " -v parametro=$param -v dni_parametro=$dni -f alumnos.awk $1
+awk -F ", " -v parametro=$param -v dni_parametro=$dni -f alumnos.awk "$1"
 # EOF
