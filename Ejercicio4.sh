@@ -6,12 +6,6 @@
 #echo "aaaaaa" $path
 #echo "path sin espacios: $path_sin_espacios"
 #set $path $2 $3 $4 $5 $6
-#echo $path_sin_espacios
-#echo $#
-#echo '$1: ' "$1"
-#echo $1
-#echo $2
-#echo $3
 
 # Descripción: Este script toma como parámetro la ruta de un archivo regular y lo
 # procesa mediante un script de AWK de acuerdo a lo solicitado en la
@@ -68,7 +62,6 @@ echo "Ejemplos:"
 echot 1 "$0 alumnos.txt -p"
 echot 1 "$0 alumnos.txt -a"
 echot 1 "$0 alumnos.txt -a 30330333"
-echot 1 "$0 '/root/Desktop/Ejercicio 4/alumnos.txt -a 30330333"
 }
 
 # Verificamos si el usuario solicitó ayuda.
@@ -81,22 +74,16 @@ fi
 # Si no solicitó ayuda procedemos a procesar los parámetros.
 # Procesamos primero parámetro del archivo con las notas.
 archivo="$1"
-IFS=";"
-echo "$archivo"
-if [[ -z "$archivo" ]]; then
+if [[ -z $archivo ]]; then
 	# Si nunca se pasó un archivo, mostramos el error y abortamos.
 	errorLlamada "Debe proveer al menos un archivo para procesar."
 else
 	# ¿No tenemos permisos de lectura sobre el archivo?
 	if [[ !(-r $archivo) ]]; then
-		#si contiene el path espaciado
-		if [[ !($archivo == "\ ") ]]; then
-			echo "archivo espaciado"
-		#fi;
 		# ¿Es porque el archivo no existe?
-		#if [[ !(-e $archivo) ]]; then
-		#	# No existe, mostramos el error y abortamos.
-		#	error "El archivo $archivo no existe."
+		if [[ !(-e $archivo) ]]; then
+			# No existe, mostramos el error y abortamos.
+			error "El archivo $archivo no existe."
 	else
 		# No tenemos permisos de lectura, mostramos el error y abortamos.
 		error "No tiene permisos de lectura sobre $archivo."
